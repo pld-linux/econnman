@@ -1,24 +1,22 @@
-%define		efl_ver		1.7.0
-
 Summary:	ConnMan User Interface in EFL
 Summary(pl.UTF-8):	Interfejs użytkownika do ConnMana wykorzystujący EFL
 Name:		econnman
 Version:	1.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Applications/Network
-Source0:	http://download.enlightenment.org/rel/apps/econnman/%{name}-%{version}.tar.gz
-# Source0-md5:	64ccd94e8f2d92a91447566ee2af67e6
+Source0:	https://download.enlightenment.org/rel/apps/econnman/%{name}-%{version}.tar.xz
+# Source0-md5:	9cc318e26fcb11b66d8ac46ffe64af0a
 URL:		http://enlightenment.org/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
-BuildRequires:	edje
+BuildRequires:	efl-devel
 BuildRequires:	pkgconfig
-BuildRequires:	python-devel >= 1:2.6
+BuildRequires:	python3-devel >= 1:2.6
 BuildRequires:	sed >= 4.0
-Requires:	python-dbus
-Requires:	python-edbus >= 1.7.0
-Requires:	python-elementary >= 1.7.0
+Requires:	python3-dbus
+Requires:	python3-efl >= 1.7.0
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -30,10 +28,14 @@ Interfejs użytkownika do ConnMana wykorzystujący EFL.
 %prep
 %setup -q
 
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/python(\s|$),#!%{__python3}\1,' \
+	econnman-bin.in
+
 %build
 %{__aclocal} -I m4
 %{__autoconf}
 %{__automake}
+PYTHON=%{__python3} \
 %configure \
 	--disable-silent-rules
 
